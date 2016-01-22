@@ -40,6 +40,19 @@ public class MovieController : MonoBehaviour {
 		
 		UpdateMovie ();
 	}
+
+	public void StopMovie()
+	{
+		//	delete current movie (to "try and go to next")
+		mMovie = null;
+		System.GC.Collect();
+
+		//	clear queue so we don't go to another
+		if (mFilenameQueue != null)
+			mFilenameQueue.Clear ();
+
+		UpdateMovie ();
+	}
 	
 	void OnFinished()
 	{

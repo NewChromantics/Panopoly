@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour {
 
-	public GameObject	mCanvas;
+	public GameObject	mFrontendCanvas;
+	public GameObject	mGuiCanvas;
 	public GameObject	m360Geo;		//	maybe this should be in a different context
 	public bool			mToggleSkybox = true;
 
@@ -27,22 +28,34 @@ public class MenuController : MonoBehaviour {
 		*/
 	}
 
-	public void HideMenu()
+	public void HideFrontendMenu()
 	{
-		if (mCanvas != null)
-			mCanvas.gameObject.SetActive (false);
-
+		if (mFrontendCanvas != null)
+			mFrontendCanvas.gameObject.SetActive (false);
+		
 		Camera.main.clearFlags = CameraClearFlags.Depth;
 	}
-
-	public void ShowMenu()
+	
+	public void ShowFrontendMenu()
 	{
-		if (mCanvas != null)
-			mCanvas.gameObject.SetActive (true);
-
+		if (mFrontendCanvas != null)
+			mFrontendCanvas.gameObject.SetActive (true);
+		
 		Camera.main.clearFlags = CameraClearFlags.Skybox;
 	}
-
+	
+	public void HideGuiMenu()
+	{
+		if (mGuiCanvas != null)
+			mGuiCanvas.gameObject.SetActive (false);
+	}
+	
+	public void ShowGuiMenu()
+	{
+		if (mGuiCanvas != null)
+			mGuiCanvas.gameObject.SetActive (true);
+	}
+	
 	public void Hide360Geo()
 	{
 		if (m360Geo != null)
