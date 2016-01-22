@@ -12,7 +12,9 @@ public class MovieSourceMonitor : MonoBehaviour {
 	public float						UpdateFrequencySecs = 1;
 	private float						mUpdateCountdown = 0;
 
-	public List<string>					ExcludeFilenames;
+	public string						ExcludeFilter = "window:";
+	public string						IncludeFilter;
+	public string						IncludeDirectory;
 
 	public void Disable()
 	{
@@ -36,19 +38,11 @@ public class MovieSourceMonitor : MonoBehaviour {
 	void UpdateSources()
 	{
 		//	enum sources
-		var Sources = PopMovie.EnumSources (null, 50000);
+		var Sources = PopMovie.EnumSources (IncludeFilter, ExcludeFilter, 50000, IncludeDirectory );
 
 		if (Sources!=null) {
 			foreach (var Filename in Sources) {
 				if ( mFilenamesAndDiscoveryTime.ContainsKey( Filename ) )
-					continue;
-
-				bool Skip = false;
-				for ( int i=0;	ExcludeFilenames != null && i<ExcludeFilenames.Count;	i++ )
-				{
-					Skip |= Filename.StartsWith( ExcludeFilenames[i] );
-				}
-				if ( Skip )
 					continue;
 
 				OnFoundFilename( Filename );
