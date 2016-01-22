@@ -8,23 +8,23 @@ public class MenuController : MonoBehaviour {
 	public GameObject	m360Geo;		//	maybe this should be in a different context
 	public bool			mToggleSkybox = true;
 
-	[Range(0,360)]
-	public float	mRotationSpeed = 1;
+	public GameObject	mMovieButtonPrefab;
+	public GameObject	mMovieButtonParent;
+	public Text			mMovieText;
+	public MovieController	mMovieController;
 
-	// Use this for initialization
-	void Start () {
+	//[Range(0,360)]
+	//public float	mRotationSpeed = 1;
 	
-	}
-	
-	// Update is called once per frame
 	void Update () {
-	
+
+		/*
 		if ( mCanvas != null )
 		{
 			float Rotation = mRotationSpeed * Time.deltaTime;
 			mCanvas.transform.Rotate( new Vector3( 0, Rotation, 0 ) );
 		}
-
+		*/
 	}
 
 	public void HideMenu()
@@ -59,5 +59,27 @@ public class MenuController : MonoBehaviour {
 		if (mToggleSkybox)
 			Camera.main.clearFlags = CameraClearFlags.Depth;
 	}
+
+	public void OnNewMovieSource(string Filename)
+	{
+		if (mMovieText != null) {
+			mMovieText.text += "\n" + Filename;
+		}
+
+		if (mMovieButtonPrefab != null) {
+			GameObject NewButton = Instantiate (mMovieButtonPrefab) as GameObject;
+
+			var Config = NewButton.GetComponent<MovieButtonConfig>();
+			if ( Config != null )
+			{
+				Config.mMovieController = mMovieController;
+				Config.SetFilename( Filename );
+			}
+			NewButton.transform.SetParent( mMovieButtonParent.transform );
+			NewButton.transform.localPosition = Vector3.zero;
+		}
+	}
+
+
 
 }

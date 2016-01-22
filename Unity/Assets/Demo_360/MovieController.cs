@@ -27,10 +27,20 @@ public class MovieController : MonoBehaviour {
 		mFilenameQueue = new List<string> ();
 		mFilenameQueue.AddRange (mFilenames);
 		mStarted = false;
-
+		
 		UpdateMovie ();
 	}
-
+	
+	public void StartMovie(string Filename)
+	{
+		//	setup the queue
+		mFilenameQueue = new List<string> ();
+		mFilenameQueue.Add (Filename);
+		mStarted = false;
+		
+		UpdateMovie ();
+	}
+	
 	void OnFinished()
 	{
 		//	signal we're no longer "started"
