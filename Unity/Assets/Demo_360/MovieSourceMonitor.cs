@@ -10,11 +10,12 @@ public class MovieSourceMonitor : MonoBehaviour {
 	private Dictionary<string,float>	mFilenamesAndDiscoveryTime = new Dictionary<string,float>();
 	[Range(0,10)]
 	public float						UpdateFrequencySecs = 1;
-	private float						mUpdateCountdown = 0;
+	[Range(0,10)]
+	public float						mUpdateCountdown = 0;
 
-	public string						ExcludeFilter = "window:";
-	public string						IncludeFilter;
 	public string						IncludeDirectory;
+
+	uint									mIndex = 0;
 
 	public void Disable()
 	{
@@ -37,18 +38,28 @@ public class MovieSourceMonitor : MonoBehaviour {
 
 	void UpdateSources()
 	{
-		//	enum sources
-		var Sources = PopMovie.EnumSources (IncludeFilter, ExcludeFilter, 50000, IncludeDirectory );
+		PopMovie.EnumDirectory( IncludeDirectory, true );
+		PopMovie.EnumDirectory( Application.streamingAssetsPath, true );
+		PopMovie.EnumDirectory( Application.persistentDataPath, true );
+		PopMovie.EnumDirectory( PopMovie.FilenamePrefix_Sdcard, true );
 
-		if (Sources!=null) {
-			foreach (var Filename in Sources) {
-				if ( mFilenamesAndDiscoveryTime.ContainsKey( Filename ) )
-					continue;
-
-				OnFoundFilename( Filename );
-			}
-		}
+		//	enum next source
+		var Source = PopMovie.EnumSource (mIndex);
+		if (Source == null)
+			return;
+		AddSource (Source,mIndex);
+		
+		mIndex++;
 	}
+
+	void AddSource(string Filename,uint Index)
+	{
+		if ( mFilenamesAndDiscoveryTime.ContainsKey( Filename ) )
+			return;
+		
+		OnFoundFilename( Filename );
+	}
+
 
 	void OnFoundFilename(string Filename)
 	{
