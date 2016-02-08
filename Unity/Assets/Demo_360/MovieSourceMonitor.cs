@@ -45,8 +45,9 @@ public class MovieSourceMonitor : MonoBehaviour {
 
 		//	enum next source
 		var Source = PopMovie.EnumSource (mIndex);
-		if (Source == null)
+		if (Source == null) {
 			return;
+		}
 		AddSource (Source,mIndex);
 		
 		mIndex++;

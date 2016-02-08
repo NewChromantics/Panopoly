@@ -11,9 +11,12 @@ public class MovieController : MonoBehaviour {
 	public List<Texture>		mStreamTextures;
 	public List<Texture>		mPerformanceTextures;
 	public List<Texture>		mAudioTextures;
+	public float				mMinDuration = 10;			//	for things like photos with 1ms duration, keep them on-screen
 	public bool					mLocalisedPerformanceGraph = false;
 	public bool					mEnableDebugLog = false;
 	public bool					mEnableDebugTextures = false;
+	public bool					mGenerateMipMaps = false;
+	public bool					mUseClientPixelStorage = true;
 	public UnityEngine.UI.Text	mErrorText;
 	public UnityEngine.Events.UnityEvent	mOnFinished;
 	public UnityEngine.Events.UnityEvent	mOnStarted;
@@ -75,7 +78,7 @@ public class MovieController : MonoBehaviour {
 			//	check duration
 			var Duration = mMovie.GetDurationMs();
 			var CurrentTime = mMovie.GetTimeMs();
-			if ( Duration > 0 && CurrentTime >= Duration )
+			if ( Duration > 0 && CurrentTime >= Duration && CurrentTime > (mMinDuration*1000.0f) )
 			{
 				mMovie = null;
 				System.GC.Collect();
@@ -100,6 +103,9 @@ public class MovieController : MonoBehaviour {
 			mFilenameQueue.RemoveAt (0);
 
 			var Params = new PopMovieParams ();
+			Params.mGenerateMipMaps = mGenerateMipMaps;
+			Params.mPixelClientStorage = mUseClientPixelStorage;
+
 			//Params.mSkipPushFrames = true;
 			try {
 				mMovie = new PopMovie (Filename, Params, true);
