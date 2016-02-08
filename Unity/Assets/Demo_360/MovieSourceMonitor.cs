@@ -14,8 +14,9 @@ public class MovieSourceMonitor : MonoBehaviour {
 	public float						mUpdateCountdown = 0;
 
 	public string						IncludeDirectory;
+	public bool							IncludeSdCard = true;
 
-	uint									mIndex = 0;
+	uint								mIndex = 0;
 
 	public void Disable()
 	{
@@ -41,7 +42,9 @@ public class MovieSourceMonitor : MonoBehaviour {
 		PopMovie.EnumDirectory( IncludeDirectory, true );
 		PopMovie.EnumDirectory( Application.streamingAssetsPath, true );
 		PopMovie.EnumDirectory( Application.persistentDataPath, true );
-		PopMovie.EnumDirectory( PopMovie.FilenamePrefix_Sdcard, true );
+
+		if ( IncludeSdCard )
+			PopMovie.EnumDirectory( PopMovie.FilenamePrefix_Sdcard, true );
 
 		//	enum next source
 		var Source = PopMovie.EnumSource (mIndex);
